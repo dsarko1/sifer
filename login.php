@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -14,13 +17,21 @@
     <div class="login-card">
       <h2>Iniciar Sesión</h2>
 
-       <form action="auntentificar_usuarioContraseña.php" method="POST">
+       <form action="autentificar_usuarioContraseña.php" method="POST">
         <input type="text" name="usuario" placeholder="Usuario" required>
         <input type="password" name="contraseña" placeholder="Contraseña" required>
         <button type="submit">Ingresar</button>
 
         <p class="register-link">¿No tenés cuenta? <a href="registro.php">Registrate aquí</a></p>
         <p class="register-link">O entrá como <a href="index.php">Invitado</a></p>
+      <?php if (isset($_SESSION['login_error'])): ?>
+      <p class="error-message" style="text-align: center; padding-top: 10px; color: red;">
+        <?php 
+          echo $_SESSION['login_error']; 
+          unset($_SESSION['login_error']);
+        ?>
+      </p>
+      <?php endif; ?>
       </form>
 
     </div>

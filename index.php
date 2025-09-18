@@ -58,14 +58,17 @@ if (!isset($_SESSION['nombre'])) {
                             <i class='bx bx-bar-chart-square icon' ></i>
                             <span class="text nav-text">Stock</span>
                         </a>
-                    </li>
+                    </li>    
 
-                    <li class="nav-link">
-                        <a href="#">
-                            <i class='bx bx-list-ul-square icon'></i>
-                            <span class="text nav-text">Administración</span>
-                        </a>
-                    </li>
+          <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] == 1): ?>
+            <li class="nav-link">
+                <a href="admin.php">
+                    <i class='bx bx-list-ul-square icon'></i>
+                    <span class="text nav-text">Administración</span>
+                </a>
+            </li>
+        <?php endif; ?>
+
                 </ul>
             </div>
 

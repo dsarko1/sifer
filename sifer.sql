@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-05-2025 a las 02:19:04
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.0.28
+-- Tiempo de generación: 17-09-2025 a las 23:37:11
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -51,7 +51,8 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`nombreRol`, `orden`, `idRol`) VALUES
-('Administrador', 0, 1);
+('Administrador', 0, 1),
+('usuario_comun', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -61,7 +62,7 @@ INSERT INTO `roles` (`nombreRol`, `orden`, `idRol`) VALUES
 
 CREATE TABLE `usuarios` (
   `nombre` varchar(25) NOT NULL,
-  `contraseña` varchar(25) NOT NULL,
+  `contraseña` varchar(255) NOT NULL,
   `rol` int(11) NOT NULL,
   `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -71,7 +72,9 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`nombre`, `contraseña`, `rol`, `id`) VALUES
-('admin', 'asd123', 1, 6);
+('test', '$2y$10$YW7DMH67nIfgGvz2pk0sPu12KmD16T1wqGennPbAgWH/ntMIv2hsq', 1, 0),
+('admin', '$2y$10$mFl3SBu5hDFRlAEigl77JeUSUMtJSIldpOUBe6NpHKwk2WNHXmH8i', 1, 1),
+('saracatungo', '$2y$10$zT6c9tsWAQcK7M.zDSoBrezrOPCxzRciMdjP0hJCHl.jnNnqNFnCe', 2, 20);
 
 --
 -- Índices para tablas volcadas
@@ -111,13 +114,13 @@ ALTER TABLE `productos`
 -- AUTO_INCREMENT de la tabla `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `idRol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idRol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Restricciones para tablas volcadas

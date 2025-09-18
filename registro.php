@@ -26,11 +26,12 @@ session_start();
     <div class="login-card">
       <h2>Crear Cuenta</h2>
       
-      <form id="registroForm" action="auntentificar_registro.php" method="POST">
-        <input type="text" name="usuario" placeholder="Usuario" required>
+      <form id="registroForm" action="autentificar_registro.php" method="POST">
+        <input type="text" id ="usuario"name="usuario" placeholder="Usuario" required>
         <input type="password" id="contraseña" name="contraseña" placeholder="Contraseña" required>
         <input type="password" id="confirmar" placeholder="Confirmar contraseña" required>
-        <div id="errorMensaje" class="error">Las contraseñas no coinciden.</div>
+        <div id="errorMensaje" class="error" style="padding-bottom:10px;">Las contraseñas no coinciden</div>
+        <div id ="errorMensaje2" class ="error" style="padding-bottom:10px;"> Nombre de usuario o contraseñas muy cortos</div>
         
         <button type="submit">Registrarse</button>
 
@@ -39,12 +40,20 @@ session_start();
       </form>
 
       <script>
+        const nombre = document.getElementById('usuario')
         const form = document.getElementById('registroForm');
         const pass = document.getElementById('contraseña');
         const confirm = document.getElementById('confirmar');
         const error = document.getElementById('errorMensaje');
+        const error2 = document.getElementById('errorMensaje2')
 
         form.addEventListener('submit', (e) => {
+          if (nombre.value.trim().length < 3){
+            e.preventDefault()
+            error2.style.display = 'block';
+          } else {
+            error2.style.display='none';
+          }
           if (pass.value !== confirm.value) {
             e.preventDefault();
             error.style.display = 'block';
