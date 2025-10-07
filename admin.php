@@ -1,9 +1,9 @@
 <?php
-session_start();
+session_start(); 
+require 'sifer_db.php';
 
-if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
-    header('Location: login.php');
-    exit();
+if (!isset($_SESSION['nombre'])) {
+
 }
 ?>
 
@@ -11,27 +11,94 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Panel de Administrador</title>
-    <link rel="stylesheet" href="estilos.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
+    <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
+    
+    <title>Sifer</title> 
 </head>
 <body>
-    <header>
-        <h1>Panel de Control - Administrador</h1>
-        <nav>
-            <a href="admin.php">Inicio</a>
-            <a href="usuarios.php">Usuarios</a>
-            <a href="configuracion.php">Configuración</a>
-            <a href="logout.php">Cerrar sesión</a>
-        </nav>
-    </header>
-    <main>
-        <section>
-            <h2>Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre_admin']); ?></h2>
-            <p>Selecciona una opción del menú para administrar el sitio.</p>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; <?php echo date('Y'); ?> Panel de Administrador</p>
-    </footer>
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="./imgs/logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nombre">
+    <?php echo isset($_SESSION['nombre']) ? htmlspecialchars($_SESSION['nombre']) : 'Invitado'; ?>
+                    </span>
+                    <span class="profession">7°4° 2025</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+
+                <li class="search-box">
+                    <i class='bx bx-search-alt icon'></i>
+                    <input type="text" placeholder="Buscar...">
+                </li>
+
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="./index.php">
+                            <i class='bx bx-home-alt-2 icon' ></i>
+                            <span class="text nav-text">Inicio</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="./stock.php">
+                            <i class='bx bx-bar-chart-square icon' ></i>
+                            <span class="text nav-text">Stock</span>
+                        </a>
+                    </li>    
+
+          <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] == 1): ?>
+            <li class="nav-link">
+                <a href="#">
+                    <i class='bx bx-list-ul-square icon'></i>
+                    <span class="text nav-text">Administración</span>
+                </a>
+            </li>
+        <?php endif; ?>
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li class="">
+                    <a href="login.php">
+                        <i class='bx bx-user-hexagon icon' ></i>
+                        <span class="text nav-text">Iniciar Sesión</span>
+                    </a>
+                </li>
+
+                <li class="mode">
+                    <div class="sun-moon">
+                        <i class='bx bx-moon icon moon'></i>
+                        <i class='bx bx-sun icon sun'></i>
+                    </div>
+                    <span class="mode-text text">Tema</span>
+
+                    <div class="toggle-switch">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+                
+            </div>
+        </div>
+
+    </nav>
+
+
+    <script src="./scripts/script.js"></script>
+
 </body>
 </html>

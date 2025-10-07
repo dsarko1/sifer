@@ -47,14 +47,14 @@ if (!isset($_SESSION['nombre'])) {
 
                 <ul class="menu-links">
                     <li class="nav-link">
-                        <a href="#">
+                        <a href="./index.php">
                             <i class='bx bx-home-alt-2 icon' ></i>
                             <span class="text nav-text">Inicio</span>
                         </a>
                     </li>
 
                     <li class="nav-link">
-                        <a href="./stock.php">
+                        <a href="#">
                             <i class='bx bx-bar-chart-square icon' ></i>
                             <span class="text nav-text">Stock</span>
                         </a>
@@ -94,95 +94,33 @@ if (!isset($_SESSION['nombre'])) {
                 
             </div>
         </div>
-
     </nav>
 
-    <section class="home">
-        <section class="banner">
-            <h1 class="texto" style="text-shadow: #00000071 1px 0 10px;">SIFER - Sistema de Ferreteria y Control de Stock</h1>
-        </section>
+    <?php
 
-        <section class="acerca_de">
-            <h2>Acerca del proyecto:</h2>
-            <h3>SIFER es un proyecto creado por alumnos de 7°4° del 2025 para facilitar el trabajo en el pañol de la institución de la EEST N°5 de Lanús "John F. Kennedy".</h3>
-        </section>
+    $sql = "SELECT id, nombre, cantidad, categoria FROM productos";
+    $resultado = $conn->query($sql);
+    
+     if ($resultado && $resultado->num_rows > 0) {
+        echo "<table border='1' cellpadding='10' cellspacing='0'>";
+        echo "<thead><tr><th>ID</th><th>Nombre</th><th>Categoría</th><th>Cantidad</th></tr></thead><tbody>";
+        
+        while ($row = $resultado->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td>" . $row['id'] . "</td>";
+            echo "<td>" . $row['nombre'] . "</td>";
+            echo "<td>" . $row['categoria'] . "</td>";
+            echo "<td>" . $row['cantidad'] . "</td>";
+            echo "</tr>";
+        }
 
-<section class="cards">
+        echo "</tbody></table>";
+    } else {
+        echo "<p>No hay productos en el stock.</p>";
+    }
+    ?>
+  </main>
 
-  <div class="card">
-    <div class="cont">
-      Test
-      <div class="cont2">
-        Unidades Disponibles: 5
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="cont">
-      Test
-      <div class="cont2">
-        Unidades Disponibles: 12
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="cont">
-      Test
-      <div class="cont2">
-        Unidades Disponibles: 34
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="cont">
-      Test
-      <div class="cont2">
-        Unidades Disponibles: 4
-      </div>
-    </div>
-  </div>
-
-    <div class="card">
-    <div class="cont">
-      Test
-      <div class="cont2">
-        Unidades Disponibles: 4
-      </div>
-    </div>
-  </div>
-
-    <div class="card">
-    <div class="cont">
-      Test
-      <div class="cont2">
-        Unidades Disponibles: 4
-      </div>
-    </div>
-  </div>
-
-    <div class="card">
-    <div class="cont">
-      Test
-      <div class="cont2">
-        Unidades Disponibles: 4
-      </div>
-    </div>
-  </div>
-
-    <div class="card">
-    <div class="cont">
-      Test
-      <div class="cont2">
-        Unidades Disponibles: 4
-      </div>
-    </div>
-  </div>
-
-</section>
-</section>
 
     <script src="./scripts/script.js"></script>
 
