@@ -96,31 +96,34 @@ if (!isset($_SESSION['nombre'])) {
         </div>
     </nav>
 
+    <section class="home">
     <?php
+$sql = "SELECT idProducto, nombreProducto, cantidad, descripcion FROM productos";
+$resultado = $conn->query($sql);
 
-    $sql = "SELECT id, nombre, cantidad, categoria FROM productos";
-    $resultado = $conn->query($sql);
-    
-     if ($resultado && $resultado->num_rows > 0) {
-        echo "<table border='1' cellpadding='10' cellspacing='0'>";
-        echo "<thead><tr><th>ID</th><th>Nombre</th><th>Categoría</th><th>Cantidad</th></tr></thead><tbody>";
-        
-        while ($row = $resultado->fetch_assoc()) {
-            echo "<tr>";
-            echo "<td>" . $row['id'] . "</td>";
-            echo "<td>" . $row['nombre'] . "</td>";
-            echo "<td>" . $row['categoria'] . "</td>";
-            echo "<td>" . $row['cantidad'] . "</td>";
-            echo "</tr>";
-        }
-
-        echo "</tbody></table>";
-    } else {
-        echo "<p>No hay productos en el stock.</p>";
+if ($resultado && $resultado->num_rows > 0) {
+    while ($row = $resultado->fetch_assoc()) {
+        echo "
+        <div class='card'>
+            <div class='cont'>
+                " . htmlspecialchars($row['nombreProducto']) . "
+                <div class='cont2'>
+                    Unidades Disponibles: " . htmlspecialchars($row['cantidad']) . "
+                </div>
+                <div class='desc'>
+                    " . htmlspecialchars($row['descripcion']) . "
+                </div>
+            </div>
+        </div>
+        ";
     }
-    ?>
-  </main>
+} else {
+    echo "<p>No hay productos en el stock.</p>";
+}
+?>
 
+    </section>
+  </main>
 
     <script src="./scripts/script.js"></script>
 
