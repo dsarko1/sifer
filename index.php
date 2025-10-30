@@ -23,7 +23,7 @@ if (!isset($_SESSION['nombre'])) {
         <header>
             <div class="image-text">
                 <span class="image">
-                    <img src="./imgs/logo.png" alt="">
+                    <a href="index.php"><img src="./imgs/logo.png" alt="logo"></a>
                 </span>
 
                 <div class="text logo-text">
@@ -106,83 +106,7 @@ if (!isset($_SESSION['nombre'])) {
             <h2>Acerca del proyecto:</h2>
             <h3>SIFER es un proyecto creado por alumnos de 7°4° del 2025 para facilitar el trabajo en el pañol de la institución de la EEST N°5 de Lanús "John F. Kennedy".</h3>
         </section>
-
-<section class="cards">
-
-  <div class="card">
-    <div class="cont">
-      Test
-      <div class="cont2">
-        Unidades Disponibles: 5
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="cont">
-      Test
-      <div class="cont2">
-        Unidades Disponibles: 12
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="cont">
-      Test
-      <div class="cont2">
-        Unidades Disponibles: 34
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="cont">
-      Test
-      <div class="cont2">
-        Unidades Disponibles: 4
-      </div>
-    </div>
-  </div>
-
-    <div class="card">
-    <div class="cont">
-      Test
-      <div class="cont2">
-        Unidades Disponibles: 4
-      </div>
-    </div>
-  </div>
-
-    <div class="card">
-    <div class="cont">
-      Test
-      <div class="cont2">
-        Unidades Disponibles: 4
-      </div>
-    </div>
-  </div>
-
-    <div class="card">
-    <div class="cont">
-      Test
-      <div class="cont2">
-        Unidades Disponibles: 4
-      </div>
-    </div>
-  </div>
-
-    <div class="card">
-    <div class="cont">
-      Test
-      <div class="cont2">
-        Unidades Disponibles: 4
-      </div>
-    </div>
-  </div>
-
-</section>
-</section>
+    </section>
 
     <script src="./scripts/script.js"></script>
 

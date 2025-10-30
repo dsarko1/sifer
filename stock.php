@@ -23,7 +23,7 @@ if (!isset($_SESSION['nombre'])) {
         <header>
             <div class="image-text">
                 <span class="image">
-                    <img src="./imgs/logo.png" alt="">
+                    <a href="index.php"><img src="./imgs/logo.png" alt="logo"></a>
                 </span>
 
                 <div class="text logo-text">
@@ -104,18 +104,25 @@ $resultado = $conn->query($sql);
 if ($resultado && $resultado->num_rows > 0) {
     while ($row = $resultado->fetch_assoc()) {
         echo "
-        <div class='card'>
-            <div class='cont'>
-                " . htmlspecialchars($row['nombreProducto']) . "
-                <div class='cont2'>
-                    Unidades Disponibles: " . htmlspecialchars($row['cantidad']) . "
-                </div>
-                <div class='desc'>
-                    " . htmlspecialchars($row['descripcion']) . "
-                </div>
-            </div>
-        </div>
-        ";
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Producto</th>
+                    <th>Nombre Producto</th>
+                    <th>Cantidad</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>" . htmlspecialchars($row['idProducto']) . "</td>
+                    <td>" . htmlspecialchars($row['nombreProducto']) . "</td>
+                    <td>" . htmlspecialchars($row['cantidad']) . "</td>
+                    <td>" . htmlspecialchars($row['descripcion']) . "</td>
+                </tr>
+            </tbody>
+        </table>
+        ";  
     }
 } else {
     echo "<p>No hay productos en el stock.</p>";

@@ -23,7 +23,7 @@ if (!isset($_SESSION['nombre'])) {
         <header>
             <div class="image-text">
                 <span class="image">
-                    <img src="./imgs/logo.png" alt="">
+                    <<a href="index.php"><img src="./imgs/logo.png" alt="logo"></a>
                 </span>
 
                 <div class="text logo-text">
