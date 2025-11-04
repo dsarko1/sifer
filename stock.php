@@ -54,7 +54,7 @@ if (!isset($_SESSION['nombre'])) {
                     </li>
 
                     <li class="nav-link">
-                        <a href="#">
+                        <a href="./stock.php">
                             <i class='bx bx-bar-chart-square icon' ></i>
                             <span class="text nav-text">Stock</span>
                         </a>
@@ -97,40 +97,47 @@ if (!isset($_SESSION['nombre'])) {
     </nav>
 
     <section class="home">
-    <?php
-$sql = "SELECT idProducto, nombreProducto, cantidad, descripcion FROM productos";
-$resultado = $conn->query($sql);
+        <section class="banner">
+            <h1 class="texto" style="text-shadow: #00000071 1px 0 10px;">Stock de Productos</h1>
+        </section>
 
-if ($resultado && $resultado->num_rows > 0) {
-    while ($row = $resultado->fetch_assoc()) {
-        echo "
-        <table>
-            <thead>
-                <tr>
-                    <th>ID Producto</th>
-                    <th>Nombre Producto</th>
-                    <th>Cantidad</th>
-                    <th>Descripción</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>" . htmlspecialchars($row['idProducto']) . "</td>
-                    <td>" . htmlspecialchars($row['nombreProducto']) . "</td>
-                    <td>" . htmlspecialchars($row['cantidad']) . "</td>
-                    <td>" . htmlspecialchars($row['descripcion']) . "</td>
-                </tr>
-            </tbody>
-        </table>
-        ";  
-    }
-} else {
-    echo "<p>No hay productos en el stock.</p>";
-}
-?>
+        <div class="table-container">
+            <?php
+            $sql = "SELECT idProducto, nombreProducto, cantidad, descripcion FROM productos";
+            $resultado = $pdo->query($sql);
 
+            if ($resultado && $resultado->rowCount() > 0) {
+                echo "
+                <table class='stock-table'>
+                    <thead>
+                        <tr>
+                            <th>ID Producto</th>
+                            <th>Nombre Producto</th>
+                            <th>Cantidad</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>";
+                
+                while($row = $resultado->fetch(PDO::FETCH_ASSOC)) {
+                    echo "
+                        <tr>
+                            <td>" . htmlspecialchars($row['idProducto']) . "</td>
+                            <td>" . htmlspecialchars($row['nombreProducto']) . "</td>
+                            <td>" . htmlspecialchars($row['cantidad']) . "</td>
+                            <td>" . htmlspecialchars($row['descripcion']) . "</td>
+                        </tr>";
+                }
+                
+                echo "
+                    </tbody>
+                </table>";
+            } else {
+                echo "<p class='no-products'>No hay productos en el stock.</p>";
+            }
+            ?>
+        </div>
     </section>
-  </main>
 
     <script src="./scripts/script.js"></script>
 
