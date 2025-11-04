@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/fondo_login"
+    android:gravity="center"
+    tools:context=".MainActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin = "30dp"
+        android:background="@drawable/custom_edittext"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="20dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:padding="24dp"
+
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bienvenido"
+                android:textAlignment="center"
+                android:textSize="17dp"
+                />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Registrarse"
+                android:textStyle="bold"
+                android:textSize="25dp"
+                android:textAlignment="center"
+                />
+
+            <EditText
+                android:id="@+id/txtusuario"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/custom_edittext"
+                android:drawableLeft="@drawable/baseline_person_24"
+                android:drawablePadding="8dp"
+                android:ems="10"
+                android:hint="Usuario"
+                android:inputType="text"
+                android:textColor="@color/azulsifer" />
+
+            <EditText
+                android:id="@+id/txtclave"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/custom_edittext"
+                android:drawableLeft="@drawable/baseline_lock_24"
+                android:drawablePadding="8dp"
+                android:ems="10"
+                android:hint="Contraseña"
+                android:inputType="numberPassword"
+
+                android:textColor="@color/azulsifer" />
+            <EditText
+                android:id="@+id/txtclaveconfirm"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/custom_edittext"
+                android:drawableLeft="@drawable/baseline_lock_24"
+                android:drawablePadding="8dp"
+                android:ems="10"
+                android:hint="Confirmar contraseña"
+                android:inputType="numberPassword"
+
+                android:textColor="@color/azulsifer"/>
+            <Button
+                android:id="@+id/btningreso"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="@color/azulsifer"
+                android:text="Registrarse"
+                android:textSize="20sp"
+                app:cornerRadius="20dp" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="¿Ya tenes una cuenta?"
+        android:textAlignment="center"
+        android:textSize="18dp"
+        />
+
+    <TextView
+        android:id="@+id/txinicio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Iniciar sesión"
+        android:textAlignment="center"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txtinvitado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Entrar como invitado"
+        android:textAlignment="center"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+</LinearLayout>
