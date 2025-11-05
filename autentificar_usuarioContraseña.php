@@ -6,14 +6,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['usuario']);
     $password = trim($_POST['contraseña']);
 
-    $stmt = $conn->prepare("SELECT * FROM usuarios WHERE nombre = ?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
+    $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE nombre = ?");
+    $stmt->execute([$username]);
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($resultado->num_rows === 1) {
-        $usuario = $resultado->fetch_assoc();
-
+    if ($usuario) {
         if (password_verify($password, $usuario['contraseña'])) {
             $_SESSION['nombre'] = $usuario['nombre'];
             $_SESSION['rol'] = $usuario['rol'];
@@ -31,4 +28,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-
