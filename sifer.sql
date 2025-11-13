@@ -133,6 +133,33 @@ ALTER TABLE `usuarios`
   ADD CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`rol`) REFERENCES `roles` (`idRol`);
 COMMIT;
 
+--tickets
+CREATE TABLE IF NOT EXISTS tickets (
+    idTicket INT PRIMARY KEY AUTO_INCREMENT,
+    numero_ticket VARCHAR(20) UNIQUE,
+    usuario_solicitante INT NOT NULL,
+    departamento VARCHAR(50),
+    estado ENUM('pendiente', 'aprobado', 'rechazado', 'entregado') DEFAULT 'pendiente',
+    fecha_solicitud TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_aprobacion TIMESTAMP NULL,
+    fecha_entrega TIMESTAMP NULL,
+    observaciones TEXT,
+    aprobado_por INT NULL,
+    FOREIGN KEY (usuario_solicitante) REFERENCES usuarios(id),
+    FOREIGN KEY (aprobado_por) REFERENCES usuarios(id)
+);
+
+CREATE TABLE IF NOT EXISTS ticket_items (
+    idItem INT PRIMARY KEY AUTO_INCREMENT,
+    ticket_id INT,
+    producto_id INT,
+    cantidad_solicitada INT NOT NULL,
+    cantidad_aprobada INT DEFAULT 0,
+    cantidad_entregada INT DEFAULT 0,
+    FOREIGN KEY (ticket_id) REFERENCES tickets(idTicket) ON DELETE CASCADE,
+    FOREIGN KEY (producto_id) REFERENCES productos(idProducto)
+);
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
