@@ -1,6 +1,13 @@
 <?php
 session_start();
 require 'sifer_db.php';
+$tickets_pendientes = 0;
+try {
+    $stmt = $pdo->query("SELECT COUNT(*) as total FROM tickets WHERE estado = 'pendiente'");
+    $tickets_pendientes = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+} catch (PDOException $e) {
+    error_log("Error al obtener tickets pendientes: " . $e->getMessage());
+}
 
 if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
     header('Location: index.php');
@@ -104,6 +111,12 @@ try {
                             <span class="text nav-text">Administración</span>
                         </a>
                     </li>
+                    <li class="nav-link">
+                         <a href="./tickets.php">
+                            <i class='bx bx-clipboard icon'></i>
+                            <span class="text nav-text">Tickets</span>
+                        </a>
+                    </li>
                     <?php endif; ?>
 
                 </ul>
@@ -153,6 +166,19 @@ try {
 
     <section class="admin-content">
         <div class="cards">
+<div class="card">
+    <i class='bx bx-clipboard icon card-icon'></i>
+    <div class="card-content">
+        <div class="cont">
+            <?php 
+            $stmt = $pdo->query("SELECT COUNT(*) as total FROM tickets WHERE estado = 'pendiente'");
+            echo $stmt->fetch()['total']; 
+            ?>
+        </div>
+        <div class="cont2">Tickets Pendientes</div>
+    </div>
+</div>
+
             <div class="card">
                 <i class='bx bx-user icon card-icon'></i>
                 <div class="card-content">
@@ -186,6 +212,14 @@ try {
                         Agregar Usuario
                     </button>
                 </div>
+                
+                <div class="admin-actions">
+    <button class="admin-btn" onclick="window.location.href='admin_tickets.php'">
+        <i class='bx bx-list-check'></i>
+        Ver Solicitudes de Usuarios
+    </button>
+</div>
+    
                 
                 <div class="table-container" style="margin-top: 20px;">
                     <table class="admin-table">
