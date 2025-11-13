@@ -21,7 +21,7 @@ try {
     }
     echo "</table>";
     
-    // Probar contraseñas
+
     echo "<h3>Probar contraseña 'admin' con cada usuario:</h3>";
     foreach ($usuarios as $usuario) {
         $resultado = password_verify('admin', $usuario['contraseña']);

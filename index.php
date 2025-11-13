@@ -39,7 +39,6 @@ if (!isset($_SESSION['nombre'])) {
 
         <div class="menu-bar">
             <div class="menu">
-
                 <li class="search-box">
                     <i class='bx bx-search-alt icon'></i>
                     <input type="text" placeholder="Buscar...">
@@ -47,28 +46,37 @@ if (!isset($_SESSION['nombre'])) {
 
                 <ul class="menu-links">
                     <li class="nav-link">
-                        <a href="#">
+                        <a href="./index.php">
                             <i class='bx bx-home-alt-2 icon' ></i>
                             <span class="text nav-text">Inicio</span>
                         </a>
                     </li>
-
                     <li class="nav-link">
                         <a href="./stock.php">
                             <i class='bx bx-bar-chart-square icon' ></i>
                             <span class="text nav-text">Stock</span>
                         </a>
-                    </li>    
-
-          <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] == 1): ?>
-            <li class="nav-link">
-                <a href="./admin.php">
-                    <i class='bx bx-list-ul-square icon'></i>
-                    <span class="text nav-text">Administración</span>
-                </a>
-            </li>
-        <?php endif; ?>
-
+                    </li>
+                    <li class="nav-link">
+                        <a href="./tickets.php">
+                            <i class='bx bx-clipboard icon'></i>
+                            <span class="text nav-text">Mis Tickets</span>
+                        </a>
+                    </li>
+                    <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] == 1): ?>
+                    <li class="nav-link">
+                        <a href="./admin.php">
+                            <i class='bx bx-cog icon'></i>
+                            <span class="text nav-text">Panel Admin</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="./admin_tickets.php">
+                            <i class='bx bx-hourglass icon'></i>
+                            <span class="text nav-text">Solicitudes</span>
+                        </a>
+                    </li>
+                    <?php endif; ?>
                 </ul>
             </div>
 

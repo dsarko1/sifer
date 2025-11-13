@@ -7,7 +7,7 @@ if (!isset($_SESSION['nombre'])) {
     exit();
 }
 
-// Obtener el ID del usuario actual
+
 $usuario_id = $_SESSION['id'];
 ?>
 
@@ -130,21 +130,26 @@ $usuario_id = $_SESSION['id'];
                             <span class="text nav-text">Stock</span>
                         </a>
                     </li>
-                   
+                    <li class="nav-link">
+                        <a href="./tickets.php">
+                            <i class='bx bx-clipboard icon'></i>
+                            <span class="text nav-text">Mis Tickets</span>
+                        </a>
+                    </li>
                     <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] == 1): ?>
                     <li class="nav-link">
                         <a href="./admin.php">
-                            <i class='bx bx-list-ul-square icon'></i>
-                            <span class="text nav-text">Administración</span>
+                            <i class='bx bx-cog icon'></i>
+                            <span class="text nav-text">Panel Admin</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="./admin_tickets.php">
+                            <i class='bx bx-hourglass icon'></i>
+                            <span class="text nav-text">Solicitudes</span>
                         </a>
                     </li>
                     <?php endif; ?>
-                     <li class="nav-link">
-                        <a href="./tickets.php">
-                            <i class='bx bx-clipboard icon'></i>
-                            <span class="text nav-text">Tickets</span>
-                        </a>
-                    </li>
                 </ul>
             </div>
 
@@ -292,7 +297,6 @@ $usuario_id = $_SESSION['id'];
         document.addEventListener('DOMContentLoaded', function() {
             let itemCount = 1;
 
-            // Agregar nuevo item al formulario
             document.getElementById('agregar-item').addEventListener('click', function() {
                 const container = document.getElementById('items-container');
                 const newItem = document.createElement('div');
@@ -321,7 +325,7 @@ $usuario_id = $_SESSION['id'];
                 container.appendChild(newItem);
                 itemCount++;
 
-                // Agregar evento para remover item
+
                 newItem.querySelector('.remover-item').addEventListener('click', function() {
                     if (document.querySelectorAll('.item-row').length > 1) {
                         newItem.remove();
@@ -329,7 +333,7 @@ $usuario_id = $_SESSION['id'];
                 });
             });
 
-            // Remover items existentes
+
             document.querySelectorAll('.remover-item').forEach(button => {
                 button.addEventListener('click', function() {
                     if (document.querySelectorAll('.item-row').length > 1) {

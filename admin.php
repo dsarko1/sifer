@@ -77,13 +77,11 @@ try {
                     <span class="profession">7°4° 2025</span>
                 </div>
             </div>
-
             <i class='bx bx-chevron-right toggle'></i>
         </header>
 
         <div class="menu-bar">
             <div class="menu">
-
                 <li class="search-box">
                     <i class='bx bx-search-alt icon'></i>
                     <input type="text" placeholder="Buscar...">
@@ -96,29 +94,32 @@ try {
                             <span class="text nav-text">Inicio</span>
                         </a>
                     </li>
-
                     <li class="nav-link">
                         <a href="./stock.php">
                             <i class='bx bx-bar-chart-square icon' ></i>
                             <span class="text nav-text">Stock</span>
                         </a>
-                    </li>    
-
+                    </li>
+                    <li class="nav-link">
+                        <a href="./tickets.php">
+                            <i class='bx bx-clipboard icon'></i>
+                            <span class="text nav-text">Mis Tickets</span>
+                        </a>
+                    </li>
                     <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] == 1): ?>
                     <li class="nav-link">
                         <a href="./admin.php">
-                            <i class='bx bx-list-ul-square icon'></i>
-                            <span class="text nav-text">Administración</span>
+                            <i class='bx bx-cog icon'></i>
+                            <span class="text nav-text">Panel Admin</span>
                         </a>
                     </li>
                     <li class="nav-link">
-                         <a href="./tickets.php">
-                            <i class='bx bx-clipboard icon'></i>
-                            <span class="text nav-text">Tickets</span>
+                        <a href="./admin_tickets.php">
+                            <i class='bx bx-hourglass icon'></i>
+                            <span class="text nav-text">Solicitudes</span>
                         </a>
                     </li>
                     <?php endif; ?>
-
                 </ul>
             </div>
 
@@ -205,19 +206,16 @@ try {
         </div>
 
             <div class="admin-section">
-                <h2>Gestión de Usuarios</h2>
+                <h2>Gestión de Productos</h2>
                 <div class="admin-actions">
                     <button class="admin-btn" onclick="abrirModal('agregarUsuario')">
-                        <i class='bx bx-user-plus'></i>
-                        Agregar Usuario
+                        <i class='bx bx-plus-circle'></i>
+                         Agregar Usuario
                     </button>
-                </div>
-                
-                <div class="admin-actions">
-    <button class="admin-btn" onclick="window.location.href='admin_tickets.php'">
-        <i class='bx bx-list-check'></i>
-        Ver Solicitudes de Usuarios
-    </button>
+                     <button class="admin-btn" onclick="window.location.href='admin_tickets.php'">
+                        <i class='bx bx-bar-chart-alt-2'></i>
+                        Ver Solicitudes de Usuarios
+                    </button>
 </div>
     
                 

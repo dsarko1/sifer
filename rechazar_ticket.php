@@ -16,7 +16,7 @@ $ticket_id = intval($_GET['id']);
 $admin_id = $_SESSION['id'];
 
 try {
-    // Actualizar estado del ticket a rechazado
+
     $sql = "UPDATE tickets SET estado = 'rechazado', fecha_aprobacion = NOW(), aprobado_por = ? WHERE idTicket = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$admin_id, $ticket_id]);

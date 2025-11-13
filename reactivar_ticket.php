@@ -15,7 +15,7 @@ if (!isset($_GET['id'])) {
 $ticket_id = intval($_GET['id']);
 
 try {
-    // Reactivar el ticket a estado pendiente
+
     $sql = "UPDATE tickets SET estado = 'pendiente', fecha_aprobacion = NULL, fecha_entrega = NULL, aprobado_por = NULL WHERE idTicket = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$ticket_id]);

@@ -7,7 +7,7 @@ if (!isset($_SESSION['nombre']) || $_SESSION['rol'] != 1) {
     exit();
 }
 
-// Obtener tickets con filtros - SOLO tickets de usuarios comunes (rol = 2)
+
 $estado = $_GET['estado'] ?? 'pendiente';
 $estados_permitidos = ['pendiente', 'aprobado', 'rechazado', 'entregado', 'todos'];
 
@@ -15,11 +15,11 @@ if (!in_array($estado, $estados_permitidos)) {
     $estado = 'pendiente';
 }
 
-// Construir la consulta - SOLO tickets de usuarios comunes
+
 $sql = "SELECT t.*, u.nombre as usuario_nombre 
         FROM tickets t 
         JOIN usuarios u ON t.usuario_solicitante = u.id 
-        WHERE u.rol = 2";  // Solo usuarios comunes (rol = 2)
+        WHERE u.rol = 2"; 
 
 if ($estado != 'todos') {
     $sql .= " AND t.estado = ?";
@@ -37,7 +37,7 @@ if ($estado != 'todos') {
 
 $tickets = $stmt->fetchAll();
 
-// Contadores para estadísticas - SOLO tickets de usuarios comunes
+
 $stmt_pendientes = $pdo->prepare("SELECT COUNT(*) as total FROM tickets t JOIN usuarios u ON t.usuario_solicitante = u.id WHERE t.estado = 'pendiente' AND u.rol = 2");
 $stmt_pendientes->execute();
 $pendientes = $stmt_pendientes->fetch()['total'];
@@ -225,13 +225,13 @@ $totales = $stmt_totales->fetch()['total'];
                     <li class="nav-link">
                         <a href="./admin.php">
                             <i class='bx bx-cog icon'></i>
-                            <span class="text nav-text">Admin General</span>
+                            <span class="text nav-text">Panel Admin</span>
                         </a>
                     </li>
                     <li class="nav-link">
                         <a href="./admin_tickets.php">
-                            <i class='bx bx-list-check icon'></i>
-                            <span class="text nav-text">Solicitudes Usuarios</span>
+                            <i class='bx bx-hourglass icon'></i>
+                            <span class="text nav-text">Solicitudes</span>
                         </a>
                     </li>
                     <?php endif; ?>
