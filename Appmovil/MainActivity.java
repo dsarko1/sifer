@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
     TextView txtregistro;
+    TextView txtinvitado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,13 +23,14 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         txtregistro = findViewById(R.id.txtregistro);
+        txtinvitado = findViewById(R.id.txtinvitado);
 
         txtregistro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 view.animate()
-                        .scaleX(0.95f)  // Se encoge un poco en X
-                        .scaleY(0.95f)  // Se encoge un poco en Y
+                        .scaleX(0.95f)
+                        .scaleY(0.95f)
                         .setDuration(100)
                         .withEndAction(new Runnable() {
                             @Override
@@ -45,6 +48,31 @@ public class MainActivity extends AppCompatActivity {
                             }
                         })
                         .start();
+            }
+        });
+        txtinvitado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                view.animate()
+                        .scaleX(0.95f)
+                        .scaleY(0.95f)
+                        .setDuration(100)
+                        .withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Vuelve al tamaño normal
+                                view.animate()
+                                        .scaleX(1f)
+                                        .scaleY(1f)
+                                        .setDuration(100)
+                                        .start();
+
+                            }
+                        })
+                        .start();
+
+                    Intent intent = new Intent(MainActivity.this, Menu_Activity.class);
+                    startActivity(intent);
             }
         });
 
