@@ -6,7 +6,26 @@ require __DIR__ . '/partials/header.php';
 
 $movimientos = $datos['movimientos'] ?? [];
 $productos = $datos['productos'] ?? [];
-$productoSeleccionado = (string) ($_GET['producto'] ?? '');
+$tipos = $datos['tipos'] ?? [];
+$filtros = $datos['filtros'] ?? [];
+$paginacion = $datos['paginacion'] ?? [];
+$tipoSeleccionado = (string) ($filtros['tipo'] ?? '');
+$productoSeleccionado = (string) ($filtros['producto'] ?? '');
+$desde = (string) ($filtros['desde'] ?? '');
+$hasta = (string) ($filtros['hasta'] ?? '');
+$pagina = max(1, (int) ($paginacion['pagina'] ?? 1));
+$paginas = max(1, (int) ($paginacion['paginas'] ?? 1));
+$total = max(0, (int) ($paginacion['total'] ?? 0));
+$mostrados = count($movimientos);
+$filtrosQuery = [
+    'tipo' => $tipoSeleccionado,
+    'producto' => $productoSeleccionado,
+    'desde' => $desde,
+    'hasta' => $hasta,
+];
+$urlPagina = static function (int $numero) use ($filtrosQuery): string {
+    return url('movimientos.php?' . http_build_query($filtrosQuery + ['pagina' => $numero]));
+};
 ?>
 <section class="page-heading">
     <div>
@@ -60,22 +79,53 @@ $productoSeleccionado = (string) ($_GET['producto'] ?? '');
             <h2>Historial</h2>
             <p class="muted">Movimientos más recientes primero.</p>
         </div>
-        <form method="get" action="<?= e(url('movimientos.php')) ?>" class="inline-filter">
-            <label class="visually-hidden" for="filtro-producto">Filtrar por producto</label>
-            <select id="filtro-producto" name="producto">
-                <option value="">Todos los productos</option>
-                <?php foreach ($productos as $producto): ?>
-                    <option value="<?= e($producto['id'] ?? '') ?>"
-                        <?= $productoSeleccionado === (string) ($producto['id'] ?? '') ? 'selected' : '' ?>>
-                        <?= e($producto['nombre'] ?? '') ?>
+    </div>
+    <form method="get" action="<?= e(url('movimientos.php')) ?>" class="filter-bar">
+        <div class="field">
+            <label for="filtro-tipo">Tipo</label>
+            <select id="filtro-tipo" name="tipo">
+                <option value="">Todos</option>
+                <?php foreach ($tipos as $claveTipo => $tipo): ?>
+                    <?php
+                    if (is_array($tipo)) {
+                        $valorTipo = (string) ($tipo['tipo'] ?? $tipo['valor'] ?? $claveTipo);
+                        $etiquetaTipo = (string) ($tipo['etiqueta'] ?? $tipo['nombre'] ?? $tipo['label'] ?? $valorTipo);
+                    } else {
+                        $valorTipo = is_string($claveTipo) ? $claveTipo : (string) $tipo;
+                        $etiquetaTipo = (is_string($claveTipo) ? (string) $tipo : $valorTipo);
+                    }
+                    ?>
+                    <option value="<?= e($valorTipo) ?>" <?= $tipoSeleccionado === $valorTipo ? 'selected' : '' ?>>
+                        <?= e($etiquetaTipo) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
-            <button class="button button-small button-secondary" type="submit">Filtrar</button>
-        </form>
-    </div>
+        </div>
+        <div class="field">
+            <label for="filtro-producto">Producto</label>
+            <select id="filtro-producto" name="producto">
+                <option value="">Todos</option>
+                <?php foreach ($productos as $producto): ?>
+                    <option value="<?= e($producto['id'] ?? '') ?>"
+                        <?= $productoSeleccionado === (string) ($producto['id'] ?? '') ? 'selected' : '' ?>>
+                        <?= e($producto['nombre'] ?? '') ?> · <?= e($producto['codigo'] ?? '') ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="field">
+            <label for="filtro-desde">Desde</label>
+            <input id="filtro-desde" name="desde" type="date" value="<?= e($desde) ?>">
+        </div>
+        <div class="field">
+            <label for="filtro-hasta">Hasta</label>
+            <input id="filtro-hasta" name="hasta" type="date" value="<?= e($hasta) ?>">
+        </div>
+        <button class="button button-secondary filter-submit" type="submit">Filtrar</button>
+        <a class="button button-quiet filter-reset" href="<?= e(url('movimientos.php')) ?>">Limpiar</a>
+    </form>
     <?php if ($movimientos === []): ?>
-        <p class="empty-state">No hay movimientos para mostrar.</p>
+        <p class="empty-state">No se encontraron movimientos con los filtros seleccionados.</p>
     <?php else: ?>
         <div class="table-wrap">
             <table>
@@ -99,5 +149,41 @@ $productoSeleccionado = (string) ($_GET['producto'] ?? '');
             </table>
         </div>
     <?php endif; ?>
+    <div class="pagination">
+        <p class="muted">Mostrando <?= e($mostrados) ?> de <?= e($total) ?> movimientos</p>
+        <nav class="pagination-links" aria-label="Paginación de movimientos">
+            <?php if ($pagina <= 1): ?>
+                <button class="button button-small button-quiet" type="button" disabled>Anterior</button>
+            <?php else: ?>
+                <a class="button button-small button-quiet" href="<?= e($urlPagina($pagina - 1)) ?>">Anterior</a>
+            <?php endif; ?>
+
+            <?php
+            $primeraPagina = max(1, $pagina - 2);
+            $ultimaPagina = min($paginas, $pagina + 2);
+            ?>
+            <?php if ($primeraPagina > 1): ?>
+                <a class="button button-small button-quiet" href="<?= e($urlPagina(1)) ?>">1</a>
+                <?php if ($primeraPagina > 2): ?><span class="pagination-ellipsis" aria-hidden="true">…</span><?php endif; ?>
+            <?php endif; ?>
+            <?php for ($numeroPagina = $primeraPagina; $numeroPagina <= $ultimaPagina; $numeroPagina++): ?>
+                <?php if ($numeroPagina === $pagina): ?>
+                    <span class="button button-small button-primary" aria-current="page"><?= e($numeroPagina) ?></span>
+                <?php else: ?>
+                    <a class="button button-small button-quiet" href="<?= e($urlPagina($numeroPagina)) ?>"><?= e($numeroPagina) ?></a>
+                <?php endif; ?>
+            <?php endfor; ?>
+            <?php if ($ultimaPagina < $paginas): ?>
+                <?php if ($ultimaPagina < $paginas - 1): ?><span class="pagination-ellipsis" aria-hidden="true">…</span><?php endif; ?>
+                <a class="button button-small button-quiet" href="<?= e($urlPagina($paginas)) ?>"><?= e($paginas) ?></a>
+            <?php endif; ?>
+
+            <?php if ($pagina >= $paginas): ?>
+                <button class="button button-small button-quiet" type="button" disabled>Siguiente</button>
+            <?php else: ?>
+                <a class="button button-small button-quiet" href="<?= e($urlPagina($pagina + 1)) ?>">Siguiente</a>
+            <?php endif; ?>
+        </nav>
+    </div>
 </section>
 <?php require __DIR__ . '/partials/footer.php'; ?>

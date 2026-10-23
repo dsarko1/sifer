@@ -64,6 +64,96 @@ function movimiento_listar(int $limite = 100, ?int $productoId = null): array
 }
 
 /**
+ * Devuelve movimientos filtrados y paginados, junto con los metadatos de página.
+ *
+ * @return array{filas: array, total: int, pagina: int, paginas: int, por_pagina: int}
+ */
+function movimiento_buscar(array $filtros = [], int $pagina = 1, int $porPagina = 20): array
+{
+    $pagina = max(1, $pagina);
+    $porPagina = max(1, min(100, $porPagina));
+    $condiciones = [];
+    $parametros = [];
+
+    $tipo = $filtros['tipo'] ?? null;
+    if (is_string($tipo) && array_key_exists($tipo, movimiento_tipos())) {
+        $condiciones[] = 'm.tipo = :tipo';
+        $parametros[':tipo'] = $tipo;
+    }
+
+    $producto = filter_var($filtros['producto'] ?? null, FILTER_VALIDATE_INT, [
+        'options' => ['min_range' => 1],
+    ]);
+    if ($producto !== false && $producto !== null) {
+        $condiciones[] = 'm.producto_id = :producto';
+        $parametros[':producto'] = $producto;
+    }
+
+    foreach (['desde', 'hasta'] as $clave) {
+        $fecha = $filtros[$clave] ?? null;
+        if (!is_string($fecha) || !movimiento_fecha_valida($fecha)) {
+            continue;
+        }
+
+        if ($clave === 'desde') {
+            $condiciones[] = 'm.creado_en >= :desde';
+            $parametros[':desde'] = $fecha;
+        } else {
+            $fechaHasta = (new DateTimeImmutable($fecha))->modify('+1 day')->format('Y-m-d');
+            $condiciones[] = 'm.creado_en < :hasta_mas_un_dia';
+            $parametros[':hasta_mas_un_dia'] = $fechaHasta;
+        }
+    }
+
+    $where = $condiciones === [] ? '' : ' WHERE ' . implode(' AND ', $condiciones);
+    $consultaTotal = db()->prepare('SELECT COUNT(*) FROM movimientos m' . $where);
+    $consultaTotal->execute($parametros);
+    $total = (int) $consultaTotal->fetchColumn();
+
+    $sql = 'SELECT m.id, m.producto_id, m.usuario_id, m.tipo, m.cantidad,
+                   m.stock_anterior, m.stock_nuevo, m.motivo, m.creado_en,
+                   p.nombre AS producto, p.codigo AS producto_codigo,
+                   u.username AS usuario, u.nombre AS usuario_nombre
+            FROM movimientos m
+            INNER JOIN productos p ON p.id = m.producto_id
+            INNER JOIN usuarios u ON u.id = m.usuario_id'
+        . $where
+        . ' ORDER BY m.creado_en DESC, m.id DESC'
+        . ' LIMIT ' . $porPagina
+        . ' OFFSET ' . (($pagina - 1) * $porPagina);
+
+    $consulta = db()->prepare($sql);
+    $consulta->execute($parametros);
+    $filas = $consulta->fetchAll();
+
+    foreach ($filas as &$movimiento) {
+        $movimiento['tipo_etiqueta'] = movimiento_tipo_etiqueta($movimiento['tipo']);
+    }
+    unset($movimiento);
+
+    return [
+        'filas' => $filas,
+        'total' => $total,
+        'pagina' => $pagina,
+        'paginas' => max(1, (int) ceil($total / $porPagina)),
+        'por_pagina' => $porPagina,
+    ];
+}
+
+/**
+ * Comprueba que una fecha tenga formato exacto Y-m-d y exista en el calendario.
+ */
+function movimiento_fecha_valida(string $fecha): bool
+{
+    $fechaParseada = DateTime::createFromFormat('!Y-m-d', $fecha);
+    $errores = DateTime::getLastErrors();
+
+    return $fechaParseada !== false
+        && $fechaParseada->format('Y-m-d') === $fecha
+        && ($errores === false || ($errores['warning_count'] === 0 && $errores['error_count'] === 0));
+}
+
+/**
  * Registra un movimiento de stock y actualiza el producto en una transacción.
  *
  * Entrada suma, salida resta (sin permitir stock negativo) y ajuste fija el
