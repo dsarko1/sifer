@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pdo_mysql, mbstring, zip
+      - name: Lint PHP files
+        run: find config includes public tests -type f -name '*.php' -print0 | xargs -0 -r -n1 php -l
+
+  tests:
+    runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb:10.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: sifer_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    env:
+      SIFER_TEST_HOST: 127.0.0.1
+      SIFER_TEST_PORT: 3306
+      SIFER_TEST_USER: root
+      SIFER_TEST_PASS: root
+      SIFER_TEST_DB: sifer_test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pdo_mysql, mbstring, zip
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+      - name: Prepare test database
+        run: php tests/setup-db.php
+      - name: Run PHPUnit
+        run: php vendor/bin/phpunit

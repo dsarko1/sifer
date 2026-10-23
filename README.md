@@ -23,3 +23,7 @@ La configuración local es opcional. Si la instalación usa datos distintos a lo
 ## Alcance v1
 
 Incluye inicio de sesión por rol, consulta del catálogo, gestión administrativa de productos, movimientos de stock y alertas de stock bajo. Las categorías se cargan con los datos de prueba; no se incluye su gestión desde la aplicación.
+
+## Tests
+
+Instalá las dependencias con `composer install` y ejecutá la suite con `composer test`. En XAMPP, usá `C:\xampp\php\php.exe`: el `php` de `PATH` puede no tener habilitada la extensión `pdo_mysql`. Los tests usan la base aparte `sifer_test`, no la base de la aplicación.
