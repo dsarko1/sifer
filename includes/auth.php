@@ -74,6 +74,8 @@ function login_usuario(array $usuario): void
         'nombre'   => (string) $usuario['nombre'],
         'rol'      => (string) $usuario['rol'],
     ];
+    $_SESSION['ultima_actividad'] = time();
+    $_SESSION['ultima_regeneracion'] = time();
 
     csrf_regenerar();
 }
@@ -99,6 +101,21 @@ function require_login(): void
     if (!esta_logueado()) {
         flash('error', 'Iniciá sesión para continuar.');
         redirigir('login.php');
+    }
+
+    $ahora = time();
+    $ultimaActividad = (int) ($_SESSION['ultima_actividad'] ?? $ahora);
+    if ($ahora - $ultimaActividad > SIFER_SESION_INACTIVA) {
+        logout_usuario();
+        flash('error', 'Sesión expirada por inactividad.');
+        redirigir('login.php');
+    }
+
+    $_SESSION['ultima_actividad'] = $ahora;
+    $ultimaRegeneracion = (int) ($_SESSION['ultima_regeneracion'] ?? 0);
+    if ($ahora - $ultimaRegeneracion > SIFER_SESION_REGENERAR) {
+        session_regenerate_id(true);
+        $_SESSION['ultima_regeneracion'] = $ahora;
     }
 }
 

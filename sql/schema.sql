@@ -13,6 +13,7 @@ USE sifer;
 SET NAMES utf8mb4;
 
 -- El orden de borrado respeta las claves foráneas.
+DROP TABLE IF EXISTS intentos_login;
 DROP TABLE IF EXISTS movimientos;
 DROP TABLE IF EXISTS productos;
 DROP TABLE IF EXISTS categorias;
@@ -30,6 +31,18 @@ CREATE TABLE usuarios (
     creado_en     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     UNIQUE KEY uq_usuarios_username (username)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Control de intentos fallidos de acceso por IP y nombre de usuario.
+CREATE TABLE intentos_login (
+    id              INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ip              VARCHAR(45) NOT NULL,
+    username        VARCHAR(50) NOT NULL,
+    intentos        TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    bloqueado_hasta DATETIME NULL,
+    ultimo_intento  DATETIME NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY unico_ip_usuario (ip, username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Categorías de productos.

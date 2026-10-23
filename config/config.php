@@ -19,6 +19,10 @@ defined('SIFER_NOMBRE') || define('SIFER_NOMBRE', 'Sifer');
 // URL base pública, sin barra final (ej.: /sifer/public).
 defined('BASE_URL') || define('BASE_URL', '/sifer/public');
 defined('ZONA_HORARIA') || define('ZONA_HORARIA', 'America/Argentina/Buenos_Aires');
+defined('SIFER_INTENTOS_MAX') || define('SIFER_INTENTOS_MAX', 5);
+defined('SIFER_BLOQUEO_MINUTOS') || define('SIFER_BLOQUEO_MINUTOS', 15);
+defined('SIFER_SESION_INACTIVA') || define('SIFER_SESION_INACTIVA', 1800);
+defined('SIFER_SESION_REGENERAR') || define('SIFER_SESION_REGENERAR', 900);
 
 // Conexión a MariaDB (valores por defecto de XAMPP).
 defined('DB_HOST') || define('DB_HOST', '127.0.0.1');
