@@ -19,7 +19,7 @@ function e(mixed $valor): string
  */
 function asset(string $ruta): string
 {
-    return dirname(BASE_URL) . '/assets/' . ltrim($ruta, '/');
+    return dirname(BASE_URL) . '/' . ltrim($ruta, '/');
 }
 
 /**
