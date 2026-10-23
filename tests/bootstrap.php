@@ -2,8 +2,18 @@
 
 declare(strict_types=1);
 
-$basePruebas = getenv('SIFER_TEST_DB');
-defined('DB_NAME') || define('DB_NAME', $basePruebas === false || $basePruebas === '' ? 'sifer_test' : $basePruebas);
+$ajustes = [
+    'DB_HOST' => ['SIFER_TEST_HOST', '127.0.0.1'],
+    'DB_PORT' => ['SIFER_TEST_PORT', '3306'],
+    'DB_USER' => ['SIFER_TEST_USER', 'root'],
+    'DB_PASS' => ['SIFER_TEST_PASS', ''],
+    'DB_NAME' => ['SIFER_TEST_DB', 'sifer_test'],
+];
+
+foreach ($ajustes as $constante => [$variable, $porDefecto]) {
+    $valor = getenv($variable);
+    defined($constante) || define($constante, $valor === false ? $porDefecto : $valor);
+}
 
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/helpers.php';
