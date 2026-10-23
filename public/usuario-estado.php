@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/auditoria.php';
 require_once __DIR__ . '/../includes/models/Usuario.php';
 
 require_admin();
@@ -47,5 +48,6 @@ if (!usuario_cambiar_activo($id, $activar)) {
     redirigir('usuarios.php');
 }
 
+auditar('cambiar_estado', 'usuario', $id, 'Estado: ' . ($activar ? 'activo' : 'inactivo'));
 flash('exito', 'Usuario "' . $usuario['username'] . '" ' . ($activar ? 'activado' : 'desactivado') . '.');
 redirigir('usuarios.php');

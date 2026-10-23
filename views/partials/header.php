@@ -28,6 +28,7 @@ $nombreVisible = nombre_usuario_actual();
                     <a href="<?= e(url('usuarios.php')) ?>">Usuarios</a>
                     <a href="<?= e(url('movimientos.php')) ?>">Movimientos</a>
                     <a href="<?= e(url('reportes.php')) ?>">Reportes</a>
+                    <a href="<?= e(url('auditoria.php')) ?>">Auditoría</a>
                 <?php endif; ?>
                 <a href="<?= e(url('catalogo.php')) ?>">Catálogo</a>
             </nav>

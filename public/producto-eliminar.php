@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/auditoria.php';
 require_once __DIR__ . '/../includes/models/Producto.php';
 
 require_admin();
@@ -28,5 +29,6 @@ if ($producto === null) {
 }
 
 producto_desactivar($id);
+auditar('eliminar', 'producto', $id, 'Código: ' . $producto['codigo'] . '; nombre: ' . $producto['nombre']);
 flash('exito', 'Producto "' . $producto['nombre'] . '" dado de baja.');
 redirigir('productos.php');

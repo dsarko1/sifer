@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/auditoria.php';
 require_once __DIR__ . '/../includes/models/Producto.php';
 require_once __DIR__ . '/../includes/models/Movimiento.php';
 
@@ -56,6 +57,14 @@ try {
         $cantidad,
         $motivo,
         (int) usuario_actual()['id']
+    );
+    $movimientoId = (int) db()->lastInsertId();
+    auditar(
+        'crear',
+        'movimiento',
+        $movimientoId > 0 ? $movimientoId : null,
+        'Tipo: ' . $tipo . '; cantidad: ' . $cantidad . '; stock: '
+        . $resultado['stock_anterior'] . ' a ' . $resultado['stock_nuevo']
     );
 
     flash(

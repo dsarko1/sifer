@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/auditoria.php';
 require_once __DIR__ . '/../includes/models/Producto.php';
 require_once __DIR__ . '/../includes/models/Categoria.php';
 
@@ -34,6 +35,7 @@ if (es_post()) {
     if ($errores === []) {
         try {
             producto_actualizar($id, $producto);
+            auditar('editar', 'producto', $id, 'Código: ' . $producto['codigo'] . '; nombre: ' . $producto['nombre']);
             flash('exito', 'Producto "' . $producto['nombre'] . '" actualizado correctamente.');
             redirigir('productos.php');
         } catch (PDOException $excepcion) {

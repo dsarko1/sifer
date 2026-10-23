@@ -18,8 +18,10 @@ foreach ($ajustes as $constante => [$variable, $porDefecto]) {
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/helpers.php';
 require_once __DIR__ . '/../includes/csrf.php';
+require_once __DIR__ . '/../includes/auditoria.php';
 require_once __DIR__ . '/../includes/models/Usuario.php';
 require_once __DIR__ . '/../includes/models/IntentoLogin.php';
+require_once __DIR__ . '/../includes/models/Auditoria.php';
 require_once __DIR__ . '/../includes/models/Categoria.php';
 require_once __DIR__ . '/../includes/models/Producto.php';
 require_once __DIR__ . '/../includes/models/Movimiento.php';
@@ -79,7 +81,7 @@ function reiniciar_base(): void
 {
     db()->exec('SET FOREIGN_KEY_CHECKS = 0');
 
-    foreach (['intentos_login', 'movimientos', 'productos', 'categorias', 'usuarios'] as $tabla) {
+    foreach (['auditoria', 'intentos_login', 'movimientos', 'productos', 'categorias', 'usuarios'] as $tabla) {
         db()->exec('TRUNCATE TABLE ' . $tabla);
     }
 

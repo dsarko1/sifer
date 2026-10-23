@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/auditoria.php';
 require_once __DIR__ . '/../includes/models/Usuario.php';
 
 require_admin();
@@ -15,12 +16,13 @@ if (es_post()) {
 
     if ($errores === []) {
         try {
-            usuario_crear(
+            $usuarioId = usuario_crear(
                 $valores['username'],
                 $valores['nombre'],
                 $valores['rol'],
                 $valores['password']
             );
+            auditar('crear', 'usuario', $usuarioId, 'Username: ' . $valores['username']);
             flash('exito', 'Usuario "' . $valores['username'] . '" creado correctamente.');
             redirigir('usuarios.php');
         } catch (PDOException $excepcion) {

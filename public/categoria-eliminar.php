@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/auditoria.php';
 require_once __DIR__ . '/../includes/models/Categoria.php';
 
 require_admin();
@@ -27,5 +28,6 @@ if ($categoria === null || !categoria_eliminar($id)) {
     redirigir('categorias.php');
 }
 
+auditar('eliminar', 'categoria', $id, 'Nombre: ' . $categoria['nombre']);
 flash('exito', 'Categoría "' . $categoria['nombre'] . '" eliminada correctamente.');
 redirigir('categorias.php');

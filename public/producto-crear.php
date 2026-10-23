@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/auditoria.php';
 require_once __DIR__ . '/../includes/models/Producto.php';
 require_once __DIR__ . '/../includes/models/Categoria.php';
 
@@ -32,7 +33,8 @@ if (es_post()) {
 
     if ($errores === []) {
         try {
-            producto_crear_con_stock_inicial($producto, (int) usuario_actual()['id']);
+            $productoId = producto_crear_con_stock_inicial($producto, (int) usuario_actual()['id']);
+            auditar('crear', 'producto', $productoId, 'Código: ' . $producto['codigo'] . '; nombre: ' . $producto['nombre']);
             flash('exito', 'Producto "' . $producto['nombre'] . '" creado correctamente.');
             redirigir('productos.php');
         } catch (PDOException $excepcion) {

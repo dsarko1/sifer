@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/auditoria.php';
 require_once __DIR__ . '/../includes/models/Categoria.php';
 
 require_admin();
@@ -15,7 +16,8 @@ if (es_post()) {
 
     if ($errores === []) {
         try {
-            categoria_crear($categoriaValidada['nombre'], $categoriaValidada['descripcion']);
+            $categoriaId = categoria_crear($categoriaValidada['nombre'], $categoriaValidada['descripcion']);
+            auditar('crear', 'categoria', $categoriaId, 'Nombre: ' . $categoriaValidada['nombre']);
             flash('exito', 'Categoría "' . $categoriaValidada['nombre'] . '" creada correctamente.');
             redirigir('categorias.php');
         } catch (PDOException $excepcion) {

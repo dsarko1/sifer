@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/auditoria.php';
 require_once __DIR__ . '/../includes/models/Categoria.php';
 
 require_admin();
@@ -31,6 +32,7 @@ if (es_post()) {
     if ($errores === []) {
         try {
             if (categoria_actualizar($id, $categoria['nombre'], $categoria['descripcion'])) {
+                auditar('editar', 'categoria', $id, 'Nombre: ' . $categoria['nombre']);
                 flash('exito', 'Categoría "' . $categoria['nombre'] . '" actualizada correctamente.');
                 redirigir('categorias.php');
             }
