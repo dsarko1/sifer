@@ -15,6 +15,14 @@ function e(mixed $valor): string
 }
 
 /**
+ * Arma la URL de un recurso ubicado en la carpeta assets de la raíz del proyecto.
+ */
+function asset(string $ruta): string
+{
+    return dirname(BASE_URL) . '/assets/' . ltrim($ruta, '/');
+}
+
+/**
  * Arma una URL interna a partir de la URL base configurada.
  */
 function url(string $ruta = ''): string
