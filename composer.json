@@ -1,0 +1,16 @@
+{
+    "require-dev": {
+        "phpunit/phpunit": "^11"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Sifer\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": [
+            "@php tests/setup-db.php",
+            "@php vendor/bin/phpunit"
+        ]
+    }
+}
