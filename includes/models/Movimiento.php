@@ -64,14 +64,12 @@ function movimiento_listar(int $limite = 100, ?int $productoId = null): array
 }
 
 /**
- * Devuelve movimientos filtrados y paginados, junto con los metadatos de página.
+ * Arma las condiciones compartidas por las consultas de movimientos.
  *
- * @return array{filas: array, total: int, pagina: int, paginas: int, por_pagina: int}
+ * @return array{0: string, 1: array<string, mixed>}
  */
-function movimiento_buscar(array $filtros = [], int $pagina = 1, int $porPagina = 20): array
+function movimiento_where_filtros(array $filtros): array
 {
-    $pagina = max(1, $pagina);
-    $porPagina = max(1, min(100, $porPagina));
     $condiciones = [];
     $parametros = [];
 
@@ -105,7 +103,19 @@ function movimiento_buscar(array $filtros = [], int $pagina = 1, int $porPagina 
         }
     }
 
-    $where = $condiciones === [] ? '' : ' WHERE ' . implode(' AND ', $condiciones);
+    return [$condiciones === [] ? '' : ' WHERE ' . implode(' AND ', $condiciones), $parametros];
+}
+
+/**
+ * Devuelve movimientos filtrados y paginados, junto con los metadatos de página.
+ *
+ * @return array{filas: array, total: int, pagina: int, paginas: int, por_pagina: int}
+ */
+function movimiento_buscar(array $filtros = [], int $pagina = 1, int $porPagina = 20): array
+{
+    $pagina = max(1, $pagina);
+    $porPagina = max(1, min(100, $porPagina));
+    [$where, $parametros] = movimiento_where_filtros($filtros);
     $consultaTotal = db()->prepare('SELECT COUNT(*) FROM movimientos m' . $where);
     $consultaTotal->execute($parametros);
     $total = (int) $consultaTotal->fetchColumn();
@@ -138,6 +148,34 @@ function movimiento_buscar(array $filtros = [], int $pagina = 1, int $porPagina 
         'paginas' => max(1, (int) ceil($total / $porPagina)),
         'por_pagina' => $porPagina,
     ];
+}
+
+/**
+ * Exporta hasta 10.000 movimientos que coincidan con los filtros recibidos.
+ */
+function movimiento_exportar(array $filtros): array
+{
+    [$where, $parametros] = movimiento_where_filtros($filtros);
+    $sql = 'SELECT m.id, m.producto_id, m.usuario_id, m.tipo, m.cantidad,
+                   m.stock_anterior, m.stock_nuevo, m.motivo, m.creado_en,
+                   p.nombre AS producto, p.codigo AS producto_codigo,
+                   u.username AS usuario, u.nombre AS usuario_nombre
+            FROM movimientos m
+            INNER JOIN productos p ON p.id = m.producto_id
+            INNER JOIN usuarios u ON u.id = m.usuario_id'
+        . $where
+        . ' ORDER BY m.creado_en DESC, m.id DESC LIMIT 10000';
+
+    $consulta = db()->prepare($sql);
+    $consulta->execute($parametros);
+    $filas = $consulta->fetchAll();
+
+    foreach ($filas as &$movimiento) {
+        $movimiento['tipo_etiqueta'] = movimiento_tipo_etiqueta($movimiento['tipo']);
+    }
+    unset($movimiento);
+
+    return $filas;
 }
 
 /**

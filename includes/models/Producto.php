@@ -342,3 +342,70 @@ function producto_contar_alertas(): int
         ->query('SELECT COUNT(*) FROM productos WHERE activo = 1 AND stock_actual <= stock_minimo')
         ->fetchColumn();
 }
+
+/**
+ * Devuelve los indicadores generales de stock activo.
+ *
+ * @return array{productos: int, unidades: int, valor: float, bajo_minimo: int}
+ */
+function producto_resumen_stock(): array
+{
+    $consulta = db()->query(
+        'SELECT COUNT(*) AS productos,
+                COALESCE(SUM(stock_actual), 0) AS unidades,
+                COALESCE(SUM(precio * stock_actual), 0) AS valor,
+                COALESCE(SUM(CASE WHEN stock_actual <= stock_minimo THEN 1 ELSE 0 END), 0) AS bajo_minimo
+         FROM productos
+         WHERE activo = 1'
+    );
+    $resumen = $consulta->fetch();
+
+    return [
+        'productos' => (int) $resumen['productos'],
+        'unidades' => (int) $resumen['unidades'],
+        'valor' => (float) $resumen['valor'],
+        'bajo_minimo' => (int) $resumen['bajo_minimo'],
+    ];
+}
+
+/**
+ * Resume unidades y valor de stock activo por categoría.
+ */
+function producto_valor_por_categoria(): array
+{
+    $consulta = db()->query(
+        "SELECT COALESCE(c.nombre, 'Sin categoría') AS nombre,
+                COUNT(p.id) AS productos,
+                COALESCE(SUM(p.stock_actual), 0) AS unidades,
+                COALESCE(SUM(p.precio * p.stock_actual), 0) AS valor
+         FROM productos p
+         LEFT JOIN categorias c ON c.id = p.categoria_id
+         WHERE p.activo = 1
+         GROUP BY c.id, c.nombre
+         ORDER BY valor DESC, nombre ASC"
+    );
+
+    return array_map(static fn (array $fila): array => [
+        'nombre' => $fila['nombre'],
+        'productos' => (int) $fila['productos'],
+        'unidades' => (int) $fila['unidades'],
+        'valor' => (float) $fila['valor'],
+    ], $consulta->fetchAll());
+}
+
+/**
+ * Lista productos activos cuyo stock está igual o por debajo del mínimo.
+ */
+function producto_bajo_minimo(): array
+{
+    $consulta = db()->query(
+        'SELECT p.id, p.codigo, p.nombre, p.stock_actual, p.stock_minimo,
+                c.nombre AS categoria
+         FROM productos p
+         LEFT JOIN categorias c ON c.id = p.categoria_id
+         WHERE p.activo = 1 AND p.stock_actual <= p.stock_minimo
+         ORDER BY (p.stock_actual - p.stock_minimo) ASC, p.nombre ASC'
+    );
+
+    return $consulta->fetchAll();
+}
