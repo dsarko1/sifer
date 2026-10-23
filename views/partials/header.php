@@ -24,6 +24,7 @@ $nombreVisible = nombre_usuario_actual();
                 <?php if (es_admin()): ?>
                     <a href="<?= e(url('dashboard.php')) ?>">Panel</a>
                     <a href="<?= e(url('productos.php')) ?>">Productos</a>
+                    <a href="<?= e(url('categorias.php')) ?>">Categorías</a>
                     <a href="<?= e(url('movimientos.php')) ?>">Movimientos</a>
                 <?php endif; ?>
                 <a href="<?= e(url('catalogo.php')) ?>">Catálogo</a>
