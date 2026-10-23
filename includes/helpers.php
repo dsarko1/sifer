@@ -23,6 +23,22 @@ function asset(string $ruta): string
 }
 
 /**
+ * Renderiza una página de error y finaliza la petición con el código indicado.
+ */
+function error_http(int $codigo, string $mensaje): never
+{
+    http_response_code($codigo);
+    $titulo = 'Error ' . $codigo;
+    $datos = [
+        'codigo' => $codigo,
+        'mensaje' => $mensaje,
+    ];
+
+    require dirname(__DIR__) . '/views/error.php';
+    exit;
+}
+
+/**
  * Arma una URL interna a partir de la URL base configurada.
  */
 function url(string $ruta = ''): string

@@ -35,8 +35,7 @@ function csrf_field(): string
 /**
  * Comprueba el token CSRF de un POST.
  *
- * Si el token no coincide, corta la petición: deja un mensaje flash y
- * vuelve al inicio (que redirige según el rol o invita a iniciar sesión).
+ * Si el token no coincide, renderiza un error HTTP 403 y corta la petición.
  */
 function csrf_verify(): void
 {
@@ -49,8 +48,6 @@ function csrf_verify(): void
         || $guardado === ''
         || !hash_equals($guardado, $enviado)
     ) {
-        http_response_code(403);
-        flash('error', 'La sesión expiró o la solicitud no es válida. Volvé a intentarlo.');
-        redirigir('index.php');
+        error_http(403, 'La sesión expiró o la solicitud no es válida. Volvé a intentarlo.');
     }
 }
