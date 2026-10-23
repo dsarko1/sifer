@@ -1,0 +1,36 @@
+services:
+  db:
+    image: mariadb:10.4
+    environment:
+      MYSQL_DATABASE: sifer
+      MYSQL_USER: sifer
+      MYSQL_PASSWORD: sifer123
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_ROOT_HOST: "%"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./sql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./sql/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    ports:
+      - "8080:80"
+    environment:
+      SIFER_DB_HOST: db
+      SIFER_DB_PORT: "3306"
+      SIFER_DB_NAME: sifer
+      SIFER_DB_USER: sifer
+      SIFER_DB_PASS: sifer123
+      SIFER_BASE_URL: ""
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:

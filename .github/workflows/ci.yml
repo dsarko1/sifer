@@ -58,3 +58,29 @@ jobs:
         run: php tests/setup-db.php
       - name: Run PHPUnit
         run: php vendor/bin/phpunit
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build and start Docker Compose
+        run: docker compose up -d --build
+      - name: Wait for the application
+        run: |
+          for intento in $(seq 1 90); do
+            codigo=$(curl -sS -o /tmp/sifer-login.html -w '%{http_code}' http://localhost:8080/login.php || true)
+            if [ "$codigo" = "200" ] && grep -q 'Sifer' /tmp/sifer-login.html; then
+              echo "La aplicación respondió con la página de login esperada."
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "La aplicación no respondió correctamente en 90 segundos."
+          exit 1
+      - name: Show Docker Compose logs
+        if: always()
+        run: docker compose logs
+      - name: Stop Docker Compose and remove volumes
+        if: always()
+        run: docker compose down -v

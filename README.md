@@ -15,6 +15,22 @@
 
 La configuración local es opcional. Si la instalación usa datos distintos a los valores predeterminados de XAMPP, copiar `config/config.example.php` como `config/config.local.php` y ajustar allí la conexión.
 
+## Docker
+
+Con Docker y Docker Compose instalados, inicia la aplicación desde la raíz del proyecto:
+
+```sh
+docker compose up --build
+```
+
+Abrí [http://localhost:8080](http://localhost:8080) e ingresá con `admin` / `Admin123!`.
+
+Para detener los servicios y reiniciar la base de datos desde cero, ejecutá:
+
+```sh
+docker compose down -v
+```
+
 ## Usuarios de prueba
 
 - Admin: `admin` / `Admin123!`
